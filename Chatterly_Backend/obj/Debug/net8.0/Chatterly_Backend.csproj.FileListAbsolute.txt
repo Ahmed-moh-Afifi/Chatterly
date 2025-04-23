@@ -133,3 +133,4 @@
 /home/ahmedafifi/projects/Chatterly/Chatterly_Backend/obj/Debug/net8.0/Chatterly_Backend.pdb
 /home/ahmedafifi/projects/Chatterly/Chatterly_Backend/obj/Debug/net8.0/Chatterly_Backend.genruntimeconfig.cache
 /home/ahmedafifi/projects/Chatterly/Chatterly_Backend/obj/Debug/net8.0/ref/Chatterly_Backend.dll
+/home/ahmedafifi/projects/Chatterly/Chatterly_Backend/bin/Debug/net8.0/NotificationService.dll
