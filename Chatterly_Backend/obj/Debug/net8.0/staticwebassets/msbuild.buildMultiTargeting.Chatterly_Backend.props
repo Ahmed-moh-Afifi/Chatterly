@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/Chatterly_Backend.props" />
+</Project>
