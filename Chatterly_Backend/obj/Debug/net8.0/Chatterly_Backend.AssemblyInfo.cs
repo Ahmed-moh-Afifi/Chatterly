@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Chatterly_Backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e376e99bb3c7a3b06b35a94f0791411b72f7fe32")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7ff87e4fa706b911dd83aa50a79b11b52ee3eb33")]
 [assembly: System.Reflection.AssemblyProductAttribute("Chatterly_Backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Chatterly_Backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

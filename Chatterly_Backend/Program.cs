@@ -106,6 +106,7 @@ builder.Services.AddSingleton(notificationService);
 builder.Services.AddSingleton<INotificationService>(notificationService);
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IChatsRepository, ChatsRepository>();
+builder.Services.AddScoped<IMessagesRepository, MessagesRepository>();
 builder.Services.AddSingleton<TokenService>();
 
 var app = builder.Build();
