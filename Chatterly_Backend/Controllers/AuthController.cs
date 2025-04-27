@@ -161,10 +161,10 @@ namespace Chatterly_Backend.Controllers
                 return Forbid();
 
             // Send an email with the url of the reset password endpoint to the client.
-            MailMessage mailMessage = new(new MailAddress("mosaabgka@gmail.com"), new MailAddress("ahmed.moh.afifi@gmail.com"))
+            MailMessage mailMessage = new(new MailAddress("chatterly.social@gmail.com"), new MailAddress(forgetPasswordModel.Email))
             {
                 Subject = "Forgotten Password",
-                Body = "If this is you who requested to reset your universe password, please copy the text below and paste it inside the app to continue the process.\n\n\n" + resetPassToken
+                Body = "If this is you who requested to reset your chatterly password, please copy the text below and paste it inside the app to continue the process.\n\n\n" + resetPassToken
             };
 
             SmtpClient smtpClient = new("smtp.gmail.com", 587) {
