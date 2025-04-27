@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+chatterly-service-account.json
+.env
