@@ -15,3 +15,6 @@
 local.properties
 chatterly-service-account.json
 .env
+Chatterly_Backend/bin/
+Chatterly_Backend/obj/
+Chatterly_Backend/.vs/
