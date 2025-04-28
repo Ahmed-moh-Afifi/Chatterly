@@ -64,7 +64,9 @@ builder.Services.AddCors(
     });
 
 builder.Services.AddDbContext<ApplicationDbContext>(cfg =>
-    cfg.UseMySql(builder.Configuration["ChatterlyConnectionString"], new MySqlServerVersion(new Version(8, 0, 39))));
+    cfg.UseMySql(builder.Configuration["ChatterlyConnectionString"],
+    ServerVersion.AutoDetect(builder.Configuration["ChatterlyConnectionString"]),
+    mySqlOptions => mySqlOptions.EnableRetryOnFailure()));
 
 var fcmService = new NotificationService.Services.FcmService();
 var notificationService = new NotificationService.NotificationService(fcmService, fcmService, fcmService);
@@ -128,8 +130,8 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 // if (app.Environment.IsDevelopment())
 // {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI();
 // }
 
 app.UseHttpsRedirection();
