@@ -2,23 +2,28 @@ package com.example.chatterly;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.ComponentActivity;
 
+import com.example.chatterly.data.local.AuthenticationAPI;
 import com.example.chatterly.data.local.TokenManager;
 import com.example.chatterly.model.authentication.LoginModel;
-import com.example.chatterly.model.authentication.TokensModel;
-import com.example.chatterly.utils.Config;
-import com.google.gson.Gson;
+import com.example.chatterly.model.authentication.RegisterModel;
+
+import java.io.IOException;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 @AndroidEntryPoint
 public class MainActivity extends ComponentActivity {
@@ -30,53 +35,73 @@ public class MainActivity extends ComponentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Gson gson = new Gson();
+        // Add OkHttp logging
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        try {
-            TokensModel tokensModel = tokenManager.readSavedTokens();
-            if (tokensModel != null) {
-                Log.d("MainActivity", "Saved Tokens " + gson.toJson(tokensModel));
-            } else {
-                Log.d("MainActivity", "Saved Tokens NULL");
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.1.3:8080/Auth/")
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        AuthenticationAPI retrofitAPI = retrofit.create(AuthenticationAPI.class);
+        LoginModel loginModel = new LoginModel("ahmedafifi", "Test@123");
+        RegisterModel registerModel = new RegisterModel("Ahmed", "Afifi", true, "leeh@mosaab.is-a.dev", "ahmedafifi", "Test@123");
+        retrofitAPI.loginRequest(loginModel).enqueue(new Callback<LoginModel>() {
+            @Override
+            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    LoginModel responseFromAPI = response.body();
+                    String responseString = "Response Code : " + response.code() + response.message();
+                    Log.d("API", responseString);
+                } else {
+                    Log.e("API", "Error: " + response.code());
+                }
             }
 
-        } catch (Exception e) {
-            Log.d("MainActivity", e.toString());
-        }
+            @Override
+            public void onFailure(Call<LoginModel> call, Throwable t) {
+                Log.e("API", "Failed: " + t.getMessage());
+            }
+        });
+        retrofitAPI.registerRequest(registerModel).enqueue(new Callback<RegisterModel>() {
+            @Override
+            public void onResponse(Call<RegisterModel> call, Response<RegisterModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    RegisterModel responseFromAPI = response.body();
+                    String responseString = "Response Code : " + response.code() + response.message();
+                    Log.d("API", responseString);
+                } else {
+                    Log.e("API", "Error: " + response.code());
+                }
+            }
 
-        LoginModel loginModel = new LoginModel("ahmedafifi", "Test@123");
-        RequestBody body = RequestBody.create(gson.toJson(loginModel), MediaType.get("application/json"));
+            @Override
+            public void onFailure(Call<RegisterModel> call, Throwable t) {
+                Log.e("API", "Failed: " + t.getMessage());
+            }
+        });
+        retrofitAPI.loginRequest(loginModel).enqueue(new Callback<LoginModel>() {
+            @Override
+            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    LoginModel responseFromAPI = response.body();
+                    String responseString = "Response Code : " + response.code() + response.message();
+                    Log.d("API", responseString);
+                } else {
+                    Log.e("API", "Error: " + response.code());
+                }
+            }
 
-        OkHttpClient httpClient = new OkHttpClient();
-        Request request = new Request.Builder().url(Config.api + "Auth/Login").post(body).build();
-        try {
-//            CompletableFuture.supplyAsync(() -> {
-//                try {
-//                    Response response = httpClient.newCall(request).execute();
-//                    Log.d("MainActivity", "Response code = " + response.code());
-//                    return gson.fromJson(response.body().string(), TokensModel.class);
-//                } catch (IOException e) {
-//                    Log.d("MainActivity", e.toString());
-//                }
-//                return null;
-//            }).thenApply((tokensModel) -> {
-//                if (tokensModel != null) {
-//                    try {
-//                        tokenManager.saveTokens(tokensModel);
-//                        Log.d("MainActivity", "Saved Tokens " + gson.toJson(tokenManager.readSavedTokens()));
-//                    } catch (Exception e) {
-//                        Log.d("MainActivity", e.toString());
-//                    }
-//                }
-//                return tokensModel;
-//            });
-
-            tokenManager.getValidTokens().thenApply((tokensModel) -> {
-                Log.d("MainActivity", "Saved Tokens " + gson.toJson(tokensModel));
-                return tokensModel;
-            });
-        } catch (Exception e) {
-            Log.d("MainActivity", e.toString());
-        }
+            @Override
+            public void onFailure(Call<LoginModel> call, Throwable t) {
+                Log.e("API", "Failed: " + t.getMessage());
+            }
+        });
     }
 }
