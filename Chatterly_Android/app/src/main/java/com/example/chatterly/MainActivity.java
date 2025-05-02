@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity;
 
 import com.example.chatterly.data.local.AuthenticationAPI;
 import com.example.chatterly.data.local.TokenManager;
+import com.example.chatterly.model.authentication.ForgetPasswordModel;
 import com.example.chatterly.model.authentication.LoginModel;
 import com.example.chatterly.model.authentication.ResetPasswordModel;
 
@@ -64,6 +65,25 @@ public class MainActivity extends ComponentActivity {
         });
     }
 
+    public void testForgetPassword(ForgetPasswordModel forgetPasswordModel, AuthenticationAPI authenticationAPI){
+        authenticationAPI.forgetPasswordRequest(forgetPasswordModel).enqueue(new Callback<ForgetPasswordModel>() {
+            @Override
+            public void onResponse(Call<ForgetPasswordModel> call, Response<ForgetPasswordModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String responseString = "Response Code : " + response.code() + "\nResponse Message: " + response.message() + "\nResponse Body: " + response.body();
+                    Log.d("RESET", responseString + "\n" +  forgetPasswordModel.toString());
+                } else {
+                    Log.e("RESET", "Error: " + response.code() + "\n" +  forgetPasswordModel.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ForgetPasswordModel> call, Throwable t) {
+                Log.e("RESET", "Failed: " + t.getMessage() + "\n" +  forgetPasswordModel.toString());
+            }
+        });
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,10 +105,6 @@ public class MainActivity extends ComponentActivity {
         AuthenticationAPI retrofitAPI = retrofit.create(AuthenticationAPI.class);
         LoginModel loginModel = new LoginModel("ahmedafifi", "Test@123");
         testLogin(loginModel, retrofitAPI);
-        loginModel.setPassword("Test@132");
-        testLogin(loginModel, retrofitAPI);
-        ResetPasswordModel resetPasswordModel = new ResetPasswordModel(loginModel.getUsername(),"Test@132", "Test@123");
-        testResetPassword(resetPasswordModel,retrofitAPI);
-        testLogin(loginModel, retrofitAPI);
+        testForgetPassword(new ForgetPasswordModel("hiii@mosaab.is-a.dev"), retrofitAPI);
     }
 }
