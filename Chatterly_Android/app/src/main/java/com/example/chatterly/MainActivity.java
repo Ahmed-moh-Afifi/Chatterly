@@ -2,17 +2,13 @@ package com.example.chatterly;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.activity.ComponentActivity;
 
 import com.example.chatterly.data.local.AuthenticationAPI;
 import com.example.chatterly.data.local.TokenManager;
 import com.example.chatterly.model.authentication.LoginModel;
-import com.example.chatterly.model.authentication.RegisterModel;
-
-import java.io.IOException;
+import com.example.chatterly.model.authentication.ResetPasswordModel;
 
 import javax.inject.Inject;
 
@@ -30,12 +26,49 @@ public class MainActivity extends ComponentActivity {
     @Inject
     TokenManager tokenManager;
 
+    public void testLogin(LoginModel loginModel, AuthenticationAPI authenticationAPI) {
+        authenticationAPI.loginRequest(loginModel).enqueue(new Callback<LoginModel>() {
+            @Override
+            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String responseString = "Response Code : " + response.code() + "\nResponse Message: " + response.message() + "\nResponse Body: " + response.body();
+                    Log.d("LOGIN", responseString + "\n" + loginModel.toString());
+                } else {
+                    Log.e("LOGIN", "Error: " + response.code() + "\n" + loginModel.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginModel> call, Throwable t) {
+                Log.e("LOGIN", "Failed: " + t.getMessage() + "\n" +  loginModel.toString());
+            }
+        });
+    }
+
+    public void testResetPassword(ResetPasswordModel resetPasswordModel, AuthenticationAPI authenticationAPI){
+        authenticationAPI.resetPasswordRequest(resetPasswordModel).enqueue(new Callback<ResetPasswordModel>() {
+            @Override
+            public void onResponse(Call<ResetPasswordModel> call, Response<ResetPasswordModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String responseString = "Response Code : " + response.code() + "\nResponse Message: " + response.message() + "\nResponse Body: " + response.body();
+                    Log.d("RESET", responseString + "\n" +  resetPasswordModel.toString());
+                } else {
+                    Log.e("RESET", "Error: " + response.code() + "\n" +  resetPasswordModel.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResetPasswordModel> call, Throwable t) {
+                Log.e("RESET", "Failed: " + t.getMessage() + "\n" +  resetPasswordModel.toString());
+            }
+        });
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Add OkHttp logging
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -51,57 +84,11 @@ public class MainActivity extends ComponentActivity {
 
         AuthenticationAPI retrofitAPI = retrofit.create(AuthenticationAPI.class);
         LoginModel loginModel = new LoginModel("ahmedafifi", "Test@123");
-        RegisterModel registerModel = new RegisterModel("Ahmed", "Afifi", true, "leeh@mosaab.is-a.dev", "ahmedafifi", "Test@123");
-        retrofitAPI.loginRequest(loginModel).enqueue(new Callback<LoginModel>() {
-            @Override
-            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    LoginModel responseFromAPI = response.body();
-                    String responseString = "Response Code : " + response.code() + response.message();
-                    Log.d("API", responseString);
-                } else {
-                    Log.e("API", "Error: " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoginModel> call, Throwable t) {
-                Log.e("API", "Failed: " + t.getMessage());
-            }
-        });
-        retrofitAPI.registerRequest(registerModel).enqueue(new Callback<RegisterModel>() {
-            @Override
-            public void onResponse(Call<RegisterModel> call, Response<RegisterModel> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    RegisterModel responseFromAPI = response.body();
-                    String responseString = "Response Code : " + response.code() + response.message();
-                    Log.d("API", responseString);
-                } else {
-                    Log.e("API", "Error: " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RegisterModel> call, Throwable t) {
-                Log.e("API", "Failed: " + t.getMessage());
-            }
-        });
-        retrofitAPI.loginRequest(loginModel).enqueue(new Callback<LoginModel>() {
-            @Override
-            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    LoginModel responseFromAPI = response.body();
-                    String responseString = "Response Code : " + response.code() + response.message();
-                    Log.d("API", responseString);
-                } else {
-                    Log.e("API", "Error: " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoginModel> call, Throwable t) {
-                Log.e("API", "Failed: " + t.getMessage());
-            }
-        });
+        testLogin(loginModel, retrofitAPI);
+        loginModel.setPassword("Test@132");
+        testLogin(loginModel, retrofitAPI);
+        ResetPasswordModel resetPasswordModel = new ResetPasswordModel(loginModel.getUsername(),"Test@132", "Test@123");
+        testResetPassword(resetPasswordModel,retrofitAPI);
+        testLogin(loginModel, retrofitAPI);
     }
 }

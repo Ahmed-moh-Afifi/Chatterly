@@ -2,8 +2,8 @@ package com.example.chatterly.model.authentication;
 
 public class RegisterModel {
     private String firstName, lastName, email, username, password;
-
     private Boolean gender;
+
     public RegisterModel(
             String firstName,
             String lastName,
@@ -36,19 +36,19 @@ public class RegisterModel {
         this.lastName = lastName;
     }
 
-    public Boolean getGender(){
+    public Boolean getGender() {
         return this.gender;
     }
 
-    public void setGender(Boolean gender){
+    public void setGender(Boolean gender) {
         this.gender = gender;
     }
 
-    public String getEmail(){
+    public String getEmail() {
         return this.email;
     }
 
-    public void setEmail(String email){
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -68,4 +68,12 @@ public class RegisterModel {
         this.password = password;
     }
 
+    public String toString() {
+        return "firstName: " + getFirstName()
+                + ", lastName: " + getLastName()
+                + ", gender: " + getGender()
+                + ", email: " + getEmail()
+                + ", username: " + getUsername()
+                + ", password: " + getPassword();
+    }
 }

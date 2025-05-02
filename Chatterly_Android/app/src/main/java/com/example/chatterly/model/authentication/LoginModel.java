@@ -1,8 +1,7 @@
 package com.example.chatterly.model.authentication;
 
 public class LoginModel {
-    private String username;
-    private String password;
+    private String username, password;
 
     public LoginModel(String username, String password) {
         this.username = username;
@@ -23,5 +22,9 @@ public class LoginModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String toString() {
+        return "username: " + getUsername() + ", password: " + getPassword();
     }
 }
