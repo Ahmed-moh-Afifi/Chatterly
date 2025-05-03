@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>API Request Demo</title>
+    </head>
+    <body>
+        <h1>Login Form</h1>
+        <form id="resetForm" action="reset" method="POST" onsubmit="getToken()">
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required><br><br>
+
+            <input type="text" id="token" name="token" value="1" style="display: none">
+
+            <label for="newPassword">New Password:</label>
+            <input type="password" id="newPassword" name="newPassword" required><br><br>
+
+            <input type="button" name="submitButton" value="Reset" onclick="getToken()">
+        </form>
+        <script>
+            function getToken() {
+                const searchParams = new URLSearchParams(window.location.search);
+                document.getElementById("token").setAttribute("value", searchParams.get("token").replaceAll(' ', '+'));
+                console.log(document.getElementById("token").getAttribute("value"))
+                document.getElementById("resetForm").submit();
+            }
+        </script>
+    </body>
+</html>
