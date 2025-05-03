@@ -15,24 +15,30 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.concurrent.CompletableFuture;
 
+import javax.inject.Inject;
+
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 public class TokenManager {
     private final String baseUrl = Config.api + "Auth/";
-    private final OkHttpClient httpClient = new OkHttpClient();
+
+    OkHttpClient httpClient;
 
     private TokensModel tokensModel;
     private CompletableFuture<TokensModel> refreshTokensFuture;
 
     private final Context context;
 
-    public TokenManager(@ApplicationContext Context context) {
+    @Inject
+    public TokenManager(@ApplicationContext Context context, OkHttpClient httpClient) {
         this.context = context;
+        this.httpClient = httpClient;
     }
 
     public TokensModel readSavedTokens() {

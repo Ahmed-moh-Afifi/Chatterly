@@ -10,6 +10,7 @@ import com.example.chatterly.data.local.TokenManager;
 import com.example.chatterly.model.authentication.ForgetPasswordModel;
 import com.example.chatterly.model.authentication.LoginModel;
 import com.example.chatterly.model.authentication.ResetPasswordModel;
+import com.example.chatterly.model.authentication.TokensModel;
 import com.example.chatterly.utils.Config;
 
 import javax.inject.Inject;
@@ -29,9 +30,9 @@ public class MainActivity extends ComponentActivity {
     TokenManager tokenManager;
 
     public void testLogin(LoginModel loginModel, AuthenticationAPI authenticationAPI) {
-        authenticationAPI.loginRequest(loginModel).enqueue(new Callback<LoginModel>() {
+        authenticationAPI.loginRequest(loginModel).enqueue(new Callback<TokensModel>() {
             @Override
-            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
+            public void onResponse(Call<TokensModel> call, Response<TokensModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     String responseString = "Response Code : " + response.code() + "\nResponse Message: " + response.message() + "\nResponse Body: " + response.body();
                     Log.d("LOGIN", responseString + "\n" + loginModel.toString());
@@ -41,7 +42,7 @@ public class MainActivity extends ComponentActivity {
             }
 
             @Override
-            public void onFailure(Call<LoginModel> call, Throwable t) {
+            public void onFailure(Call<TokensModel> call, Throwable t) {
                 Log.e("LOGIN", "Failed: " + t.getMessage() + "\n" +  loginModel.toString());
             }
         });
