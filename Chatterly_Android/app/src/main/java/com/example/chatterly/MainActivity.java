@@ -10,6 +10,7 @@ import com.example.chatterly.data.local.TokenManager;
 import com.example.chatterly.model.authentication.ForgetPasswordModel;
 import com.example.chatterly.model.authentication.LoginModel;
 import com.example.chatterly.model.authentication.ResetPasswordModel;
+import com.example.chatterly.utils.Config;
 
 import javax.inject.Inject;
 
@@ -97,7 +98,7 @@ public class MainActivity extends ComponentActivity {
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.3:8080/Auth/")
+                .baseUrl(Config.api)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -105,6 +106,6 @@ public class MainActivity extends ComponentActivity {
         AuthenticationAPI retrofitAPI = retrofit.create(AuthenticationAPI.class);
         LoginModel loginModel = new LoginModel("ahmedafifi", "Test@123");
         testLogin(loginModel, retrofitAPI);
-        testForgetPassword(new ForgetPasswordModel("hiii@mosaab.is-a.dev"), retrofitAPI);
+        testForgetPassword(new ForgetPasswordModel("hi@mosaab.is-a.dev"), retrofitAPI);
     }
 }

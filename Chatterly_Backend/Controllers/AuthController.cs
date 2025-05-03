@@ -176,7 +176,7 @@ namespace Chatterly_Backend.Controllers
             return Ok();
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("ResetPasswordTn")]
         public async Task<IActionResult> ResetPasswordTn([FromBody] ResetPasswordTnModel resetPasswordTnModel)
         {

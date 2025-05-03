@@ -11,15 +11,15 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 
 public interface AuthenticationAPI {
-    @POST("Login")
+    @POST("Auth/Login")
     Call<LoginModel> loginRequest(@Body LoginModel loginData);
 
-    @POST("Register")
+    @POST("Auth/Register")
     Call<RegisterModel> registerRequest(@Body RegisterModel registerModel);
 
-    @PUT("ResetPassword")
+    @PUT("Auth/ResetPassword")
     Call<ResetPasswordModel> resetPasswordRequest(@Body ResetPasswordModel resetPasswordModel);
 
-    @POST("ForgetPasswordRequest")
+    @POST("Auth/ForgetPasswordRequest")
     Call<ForgetPasswordModel> forgetPasswordRequest(@Body ForgetPasswordModel forgetPasswordModel);
 }
