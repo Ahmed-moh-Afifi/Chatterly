@@ -16,11 +16,11 @@ public interface AuthenticationAPI {
     Call<TokensModel> loginRequest(@Body LoginModel loginData);
 
     @POST("Auth/Register")
-    Call registerRequest(@Body RegisterModel registerModel);
+    Call<Void> registerRequest(@Body RegisterModel registerModel);
 
     @PUT("Auth/ResetPassword")
-    Call resetPasswordRequest(@Body ResetPasswordModel resetPasswordModel);
+    Call<Void> resetPasswordRequest(@Body ResetPasswordModel resetPasswordModel);
 
     @POST("Auth/ForgetPasswordRequest")
-    Call forgetPasswordRequest(@Body ForgetPasswordModel forgetPasswordModel);
+    Call<String> forgetPasswordRequest(@Body ForgetPasswordModel forgetPasswordModel);
 }

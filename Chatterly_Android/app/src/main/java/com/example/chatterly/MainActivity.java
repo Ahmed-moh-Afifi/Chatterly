@@ -49,28 +49,23 @@ public class MainActivity extends ComponentActivity {
     }
 
     public void testResetPassword(ResetPasswordModel resetPasswordModel, AuthenticationAPI authenticationAPI){
-        authenticationAPI.resetPasswordRequest(resetPasswordModel).enqueue(new Callback<ResetPasswordModel>() {
+        authenticationAPI.resetPasswordRequest(resetPasswordModel).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<ResetPasswordModel> call, Response<ResetPasswordModel> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    String responseString = "Response Code : " + response.code() + "\nResponse Message: " + response.message() + "\nResponse Body: " + response.body();
-                    Log.d("RESET", responseString + "\n" +  resetPasswordModel.toString());
-                } else {
-                    Log.e("RESET", "Error: " + response.code() + "\n" +  resetPasswordModel.toString());
-                }
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.e("RESET", "Error: " + response.code() + "\n" + resetPasswordModel.toString());
             }
 
             @Override
-            public void onFailure(Call<ResetPasswordModel> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Log.e("RESET", "Failed: " + t.getMessage() + "\n" +  resetPasswordModel.toString());
             }
         });
     }
 
     public void testForgetPassword(ForgetPasswordModel forgetPasswordModel, AuthenticationAPI authenticationAPI){
-        authenticationAPI.forgetPasswordRequest(forgetPasswordModel).enqueue(new Callback<ForgetPasswordModel>() {
+        authenticationAPI.forgetPasswordRequest(forgetPasswordModel).enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<ForgetPasswordModel> call, Response<ForgetPasswordModel> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     String responseString = "Response Code : " + response.code() + "\nResponse Message: " + response.message() + "\nResponse Body: " + response.body();
                     Log.d("RESET", responseString + "\n" +  forgetPasswordModel.toString());
@@ -80,7 +75,7 @@ public class MainActivity extends ComponentActivity {
             }
 
             @Override
-            public void onFailure(Call<ForgetPasswordModel> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 Log.e("RESET", "Failed: " + t.getMessage() + "\n" +  forgetPasswordModel.toString());
             }
         });
