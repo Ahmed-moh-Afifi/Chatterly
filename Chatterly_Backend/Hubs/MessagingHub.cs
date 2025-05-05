@@ -8,6 +8,7 @@ using System.Security.Claims;
 using Chatterly_Backend.Data;
 using Chatterly_Backend.Data.Models;
 using Chatterly_Backend.Repositories;
+using System.Text.Json;
 
 namespace Chatterly_Backend.Hubs
 {
@@ -54,8 +55,15 @@ namespace Chatterly_Backend.Hubs
             }
         }
 
-        public async Task SendToChatAsync(Message message)
+        public async Task SendToChatAsync(string messageJson)
         {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+            };
+            var message = JsonSerializer.Deserialize<Message>(messageJson, options) ?? throw new ArgumentException("Invalid message format");
+
             string sender = Context.User!.FindFirstValue("uid")!;
             logger.LogDebug($"User {sender} sending to chat {message.ChatId}");
 
@@ -80,6 +88,19 @@ namespace Chatterly_Backend.Hubs
             };
 
             await notificationService.SendNotificationAsync(notification);
+        }
+
+        public void Test(string message) {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+            };
+
+            logger.LogInformation("Test Invoked with message: " + message);
+            var convertedMessage = JsonSerializer.Deserialize<Message>(message, options) ?? throw new ArgumentException("Invalid message format");
+            logger.LogInformation("Test Invoked with message: " + convertedMessage.Body);
+            // Clients.All.SendAsync("Test", message);
         }
 
         public async Task SendUserStatus(UserStatus status)
