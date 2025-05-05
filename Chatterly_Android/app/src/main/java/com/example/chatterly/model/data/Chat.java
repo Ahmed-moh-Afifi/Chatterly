@@ -2,17 +2,18 @@ package com.example.chatterly.model.data;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Chat {
     private int id;
     private String name;
-    private LocalDateTime lastEdited;
+    private Date lastEdited;
     private String photoUrl;
     private List<Message> messages;
     private List<User> users;
 
-    public Chat(int id, String name, LocalDateTime lastEdited) {
+    public Chat(int id, String name, Date lastEdited) {
         this.id = id;
         this.name = name;
         this.lastEdited = lastEdited;
@@ -44,11 +45,11 @@ public class Chat {
         this.photoUrl = photoUrl;
     }
 
-    public LocalDateTime getLastEdited() {
+    public Date getLastEdited() {
         return lastEdited;
     }
 
-    public void setLastEdited(LocalDateTime lastEdited) {
+    public void setLastEdited(Date lastEdited) {
         this.lastEdited = lastEdited;
     }
 

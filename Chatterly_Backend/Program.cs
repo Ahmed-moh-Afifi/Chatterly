@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NotificationService.Interfaces;
 using DotNetEnv;
+using Chatterly_Backend.Hubs;
 
 var envPath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
 if (File.Exists(envPath))
@@ -118,6 +119,8 @@ builder.Services.AddScoped<IChatsRepository, ChatsRepository>();
 builder.Services.AddScoped<IMessagesRepository, MessagesRepository>();
 builder.Services.AddSingleton<TokenService>();
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 // Apply migrations automatically
@@ -143,5 +146,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<MessagingHub>("/MessagingHub");
 
 app.Run();

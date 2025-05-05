@@ -1,6 +1,6 @@
 package com.example.chatterly.model.data;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,11 +11,9 @@ public class Message {
     private final List<String> images;
     private final List<String> videos;
     private final List<String> audios;
-    private final LocalDateTime publishDate;
-    private Integer childPostId;
+    private final Date publishDate;
     private Integer messageRepliedTo;
     private final String authorId;
-    private List<Object> widgets; // Placeholder for Widget
     private int reactionsCount;
     private int repliesCount;
     private final int chatId;
@@ -23,7 +21,7 @@ public class Message {
     private User author;
 
     public Message(int id, String body, List<String> images, List<String> videos, List<String> audios,
-                   LocalDateTime publishDate, String authorId, int reactionsCount, int repliesCount, int chatId) {
+                   Date publishDate, String authorId, int reactionsCount, int repliesCount, int chatId) {
         this.id = id;
         this.body = body;
         this.images = images;
@@ -69,28 +67,12 @@ public class Message {
         this.reactionsCount = reactionsCount;
     }
 
-    public List<Object> getWidgets() {
-        return widgets;
-    }
-
-    public void setWidgets(List<Object> widgets) {
-        this.widgets = widgets;
-    }
-
     public Integer getMessageRepliedTo() {
         return messageRepliedTo;
     }
 
     public void setMessageRepliedTo(Integer messageRepliedTo) {
         this.messageRepliedTo = messageRepliedTo;
-    }
-
-    public Integer getChildPostId() {
-        return childPostId;
-    }
-
-    public void setChildPostId(Integer childPostId) {
-        this.childPostId = childPostId;
     }
 
     public String getUid() {
@@ -109,7 +91,7 @@ public class Message {
         return authorId;
     }
 
-    public LocalDateTime getPublishDate() {
+    public Date getPublishDate() {
         return publishDate;
     }
 
@@ -132,6 +114,4 @@ public class Message {
     public int getId() {
         return id;
     }
-
-    // Getters and Setters
 }

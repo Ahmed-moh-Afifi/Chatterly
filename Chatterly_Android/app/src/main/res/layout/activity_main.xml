@@ -1,18 +1,59 @@
-<!-- res/layout/activity_main.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fitsSystemWindows="true">
 
-    <TextView
-        android:id="@+id/helloText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello, World!" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/myButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Click Me" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/headerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="Chats"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/searchBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/headerText"
+            android:layout_margin="16dp"
+            android:hint="Search for users..."
+            android:padding="12dp"
+            android:background="@android:drawable/edit_text" />
+
+        <ListView
+            android:id="@+id/searchResults"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/searchBar"
+            android:layout_marginHorizontal="16dp"
+            android:visibility="gone"
+            android:background="@android:color/white"
+            android:divider="@android:color/darker_gray"
+            android:dividerHeight="1dp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/searchResults"
+            android:layout_margin="16dp"
+            android:visibility="visible" />
+
+    </RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -13,45 +13,45 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface ChatsAPI {
-    @POST("Chats/{userId}/Chats/{name}")
+    @POST("{userId}/Chats/{name}")
     Call<Chat> createChat(
             @Path("userId") String userId,
             @Path("name") String name,
             @Body StringListWrapper userIds
     );
 
-    @GET("Chats/{userId}/Chats")
+    @GET("{userId}/Chats")
     Call<List<Chat>> getUserChats(
             @Path("userId") String userId
     );
 
-    @GET("Chats/{userId}/Chats/{chatId}")
+    @GET("{userId}/Chats/{chatId}")
     Call<Chat> getChat(
             @Path("userId") String userId,
             @Path("chatId") int chatId
     );
 
-    @POST("Chats/{userId}/Chats/{chatId}/Users/{addedUserId}/Add")
+    @POST("{userId}/Chats/{chatId}/Users/{addedUserId}/Add")
     Call<Void> addUserToChat(
             @Path("userId") String userId,
             @Path("chatId") int chatId,
             @Path("addedUserId") String addedUserId
     );
 
-    @POST("Chats/{userId}/Chats/{chatId}/Users/{removedUserId}/Remove")
+    @POST("{userId}/Chats/{chatId}/Users/{removedUserId}/Remove")
     Call<Void> removeUserFromChat(
             @Path("userId") String userId,
             @Path("chatId") int chatId,
             @Path("removedUserId") String removedUserId
     );
 
-    @DELETE("Chats/{userId}/Chats/{chatId}")
+    @DELETE("{userId}/Chats/{chatId}")
     Call<Void> deleteChat(
             @Path("userId") String userId,
             @Path("chatId") int chatId
     );
 
-    @GET("Chats/{userId}/Chats/{conversationInitiator}/And/{targetedGuy}")
+    @GET("{userId}/Chats/{conversationInitiator}/And/{targetedGuy}")
     Call<Chat> getChatByParticipants(
             @Path("conversationInitiator") String conversationInitiator,
             @Path("targetedGuy") String targetedGuy

@@ -1,6 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fitsSystemWindows="true">
 
-</LinearLayout>
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Register"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="24dp" />
+
+            <EditText
+                android:id="@+id/firstnameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="First Name"
+                android:inputType="text"
+                android:layout_marginBottom="16dp" />
+
+            <EditText
+                android:id="@+id/lastnameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Last Name"
+                android:inputType="text"
+                android:layout_marginBottom="16dp" />
+
+            <EditText
+                android:id="@+id/emailEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:layout_marginBottom="16dp" />
+
+            <EditText
+                android:id="@+id/usernameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Username"
+                android:inputType="text"
+                android:layout_marginBottom="16dp" />
+
+            <EditText
+                android:id="@+id/passwordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:layout_marginBottom="16dp" />
+
+            <EditText
+                android:id="@+id/confirmPasswordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Confirm Password"
+                android:inputType="textPassword"
+                android:layout_marginBottom="16dp" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp" />
+
+            <Button
+                android:id="@+id/registerButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Register"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:id="@+id/loginTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Already have an account? Login"
+                android:textColor="@android:color/holo_blue_dark"
+                android:layout_marginTop="8dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

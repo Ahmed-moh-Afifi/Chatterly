@@ -148,7 +148,7 @@ public class TokenManager {
     }
 
     public CompletableFuture<TokensModel> getValidTokens() {
-        if (hasValidTokens()) {
+        if (hasValidTokens() || tokensModel == null) {
             return CompletableFuture.supplyAsync(() -> tokensModel);
         }
 

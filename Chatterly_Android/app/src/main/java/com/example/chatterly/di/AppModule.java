@@ -7,7 +7,9 @@ import com.example.chatterly.data.local.TokenManager;
 import com.example.chatterly.data.remote.AuthenticatedHttpClient;
 import com.example.chatterly.data.remote.ChatsAPI;
 import com.example.chatterly.data.remote.MessagesAPI;
+import com.example.chatterly.data.remote.MessagingHub;
 import com.example.chatterly.data.remote.UsersAPI;
+import com.example.chatterly.data.repository.AuthenticationRepository;
 import com.example.chatterly.utils.Config;
 import com.example.chatterly.utils.CustomDateAdapter;
 import com.google.gson.Gson;
@@ -98,5 +100,17 @@ public class AppModule {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         return retrofit.create(AuthenticationAPI.class);
+    }
+
+    @Provides
+    @Singleton
+    public static MessagingHub provideMessagingHub(TokenManager tokenManager, Gson gson) {
+        return new MessagingHub(tokenManager, gson);
+    }
+
+    @Provides
+    @Singleton
+    public static AuthenticationRepository provideAuthenticationRepository(TokenManager tokenManager, UsersAPI usersAPI) {
+        return new AuthenticationRepository(tokenManager, usersAPI);
     }
 }

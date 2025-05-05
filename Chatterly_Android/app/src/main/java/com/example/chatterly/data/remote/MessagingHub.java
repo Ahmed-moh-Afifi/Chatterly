@@ -1,52 +1,94 @@
-//import com.example.chatterly.data.local.TokenManager;
-//import com.example.chatterly.utils.Config;
-//import com.microsoft.signalr.HubConnection;
-//import com.microsoft.signalr.HubConnectionBuilder;
-//import com.microsoft.signalr.HubConnectionState;
-//
-//import io.reactivex.Single;
-//
-//import java.util.function.Consumer;
-//
-//public class MessagingHub {
-//    private final HubConnection hubConnection;
-//
-//    private MessagingHub(TokenManager tokenManager) {
-//        String url = Config.api + "/MessagingHub";
-//        this.hubConnection = HubConnectionBuilder.create(url)
-//                .withAccessTokenProvider(Single.fromCallable(() -> {
-//                    try {
-//                        return tokenManager.getValidTokens().join().getAccessToken();
-//                    } catch (Exception e) {
-//                        throw new RuntimeException("Failed to get access token", e);
-//                    }
-//                }))
-//                .build();
-//    }
-//
-//    public void start() {
-//        if (hubConnection.getConnectionState() == HubConnectionState.DISCONNECTED) {
-//            hubConnection.start().blockingAwait();
-//        }
-//    }
-//
-//    public void stop() {
-//        hubConnection.stop().blockingAwait();
-//    }
-//
-//    public void on(String methodName, Consumer<Object[]> handler) {
-//        hubConnection.on(methodName, handler, Object[].class);
-//    }
-//
-//    public void off(String methodName) {
-//        hubConnection.remove(methodName);
-//    }
-//
-//    public void invoke(String methodName, Object... arguments) {
-//        hubConnection.send(methodName, arguments);
-//    }
-//
-//    public boolean isRunning() {
-//        return hubConnection.getConnectionState() == HubConnectionState.CONNECTED;
-//    }
-//}
+package com.example.chatterly.data.remote;
+
+import android.util.Log;
+
+import com.example.chatterly.data.local.AuthenticationAPI;
+import com.example.chatterly.data.local.TokenManager;
+import com.example.chatterly.model.authentication.LoginModel;
+import com.example.chatterly.model.authentication.TokensModel;
+import com.example.chatterly.model.data.Message;
+import com.example.chatterly.model.data.User;
+import com.example.chatterly.utils.Config;
+import com.google.gson.Gson;
+import com.microsoft.signalr.HubConnection;
+import com.microsoft.signalr.HubConnectionBuilder;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.Callable;
+
+import javax.inject.Inject;
+
+import io.reactivex.Completable;
+import io.reactivex.Single;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class MessagingHub {
+
+    private TokenManager tokenManager;
+    private final HubConnection hubConnection;
+    private Runnable mainScreenListener;
+    private final Map<Integer, Runnable> chatScreenListeners = new HashMap<>();
+    private Gson gson;
+
+    @Inject
+    public MessagingHub(TokenManager tokenManager, Gson gson) {
+        this.tokenManager = tokenManager;
+        this.gson = gson;
+        hubConnection = HubConnectionBuilder.create(Config.api + "MessagingHub").withAccessTokenProvider(getAccessTokenProvider()).build();
+
+        hubConnection.on("MessageReceived", (object) -> {
+            String jsonString = gson.toJson(object);
+            Message message = gson.fromJson(jsonString, Message.class);
+            Log.d("SignalRHub", "Message received in chat: " + message.getChatId());
+            Log.d("SignalRHub", jsonString);
+            if (mainScreenListener != null) {
+                mainScreenListener.run();
+            }
+            if (chatScreenListeners.containsKey(message.getChatId())) {
+                Objects.requireNonNull(chatScreenListeners.get(message.getChatId())).run();
+            }
+        }, Object.class);
+
+        hubConnection.start().subscribe(() -> Log.d("SignalRHub", "Connected to SignalR Hub"),
+                throwable -> Log.e("SignalRHub", "Error connecting to SignalR Hub", throwable));
+    }
+
+    public void setMainScreenListener(Runnable listener) {
+        this.mainScreenListener = listener;
+    }
+
+    public void setChatScreenListener(int chatId, Runnable listener) {
+        chatScreenListeners.put(chatId, listener);
+    }
+
+    public void removeChatScreenListener(int chatId) {
+        chatScreenListeners.remove(chatId);
+    }
+
+    public Completable subscribeToChats(List<String> chatIds) {
+        return hubConnection.invoke("SubscribeToChats", chatIds);
+    }
+
+    private Single<String> getAccessTokenProvider() {
+        return Single.create(emitter -> {
+            tokenManager.getValidTokens().thenApply((tokensModel) -> {
+                emitter.onSuccess(tokensModel.getAccessToken());
+                return tokensModel;
+            });
+        });
+    }
+
+    public Completable sendMessage(Message message) {
+        Log.d("MessagingHub::sendMessage", "Sending message: " + message.getBody() + " to chat with id: " + message.getChatId());
+        String json = gson.toJson(message);
+        Log.d("MessagingHub::sendMessage", "Sending message: " + json);
+        return hubConnection.invoke("SendToChatAsync", json);
+    }
+}
