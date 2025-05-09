@@ -50,8 +50,8 @@ public class MessagingHub {
         hubConnection.on("MessageReceived", (object) -> {
             String jsonString = gson.toJson(object);
             Message message = gson.fromJson(jsonString, Message.class);
-            Log.d("SignalRHub", "Message received in chat: " + message.getChatId());
-            Log.d("SignalRHub", jsonString);
+            Log.d("MessagingHub", "Message received in chat: " + message.getChatId());
+            Log.d("MessagingHub", jsonString);
             if (mainScreenListener != null) {
                 mainScreenListener.run();
             }
@@ -67,8 +67,8 @@ public class MessagingHub {
 
     public Completable connect() {
         Completable c = hubConnection.start();
-        c.subscribe(() -> Log.d("SignalRHub", "Connected to SignalR Hub"),
-                throwable -> Log.e("SignalRHub", "Error connecting to SignalR Hub", throwable));
+        c.subscribe(() -> Log.d("MessagingHub", "Connected to SignalR Hub"),
+                throwable -> Log.e("MessagingHub", "Error connecting to SignalR Hub", throwable));
         return c;
     }
 
@@ -103,5 +103,9 @@ public class MessagingHub {
         Log.d("MessagingHub::sendMessage", "Sending message: " + json);
         sentMessages.add(message.getUid());
         return hubConnection.invoke("SendToChatAsync", json);
+    }
+
+    public boolean sentFromHere(String messageGuid) {
+        return sentMessages.contains(messageGuid);
     }
 }
