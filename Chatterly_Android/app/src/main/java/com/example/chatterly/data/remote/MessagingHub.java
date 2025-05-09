@@ -65,9 +65,11 @@ public class MessagingHub {
         }, Object.class);
     }
 
-    public Disposable connect() {
-        return hubConnection.start().subscribe(() -> Log.d("SignalRHub", "Connected to SignalR Hub"),
+    public Completable connect() {
+        Completable c = hubConnection.start();
+        c.subscribe(() -> Log.d("SignalRHub", "Connected to SignalR Hub"),
                 throwable -> Log.e("SignalRHub", "Error connecting to SignalR Hub", throwable));
+        return c;
     }
 
     public void setMainScreenListener(Runnable listener) {

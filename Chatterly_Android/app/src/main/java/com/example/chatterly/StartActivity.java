@@ -51,12 +51,10 @@ public class StartActivity extends AppCompatActivity {
                     for (Chat chat: chats) {
                         chatIds.add(String.valueOf(chat.getId()));
                     }
-                    messagingHub.connect().wait();
+                    messagingHub.connect().blockingAwait();
                     messagingHub.subscribeToChats(chatIds).blockingAwait();
                 } catch (IOException e) {
                     // Report to user.
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
                 }
                 Log.d("StartActivity", "User does not equal null, starting MainActivity");
                 Intent intent = new Intent(this, MainActivity.class);
@@ -66,7 +64,6 @@ public class StartActivity extends AppCompatActivity {
             return user;
         });
 
-        // Close this activity to prevent returning to it
         finish();
     }
 }
