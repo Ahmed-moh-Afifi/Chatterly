@@ -89,6 +89,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<TokensModel> call, Throwable t) {
                 runOnUiThread(() -> {
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(LoginActivity.this, "Login failed. Check your credentials.", Toast.LENGTH_SHORT).show();
                 });
             }

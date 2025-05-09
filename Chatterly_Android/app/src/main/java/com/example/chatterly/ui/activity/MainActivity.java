@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chatterly.R;
 import com.example.chatterly.data.remote.MessagingHub;
+import com.example.chatterly.data.repository.AuthenticationRepository;
 import com.example.chatterly.model.data.Chat;
 import com.example.chatterly.model.data.User;
 import com.example.chatterly.ui.adapter.ChatAdapter;
@@ -41,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     @Inject
     Gson gson;
 
+    @Inject
+    AuthenticationRepository authenticationRepository;
+
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private MainViewModel mainViewModel;
@@ -51,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter<String> searchAdapter;
     private List<User> foundUsers = new ArrayList<>();
     private Handler handler = new Handler(Looper.getMainLooper());
+    private User lastSelectedUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
         searchResults.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
             User selectedUser = foundUsers.get(position);
+            lastSelectedUser = selectedUser;
             mainViewModel.getChat(selectedUser.getId());
         });
     }
@@ -136,11 +142,15 @@ public class MainActivity extends AppCompatActivity {
             searchResults.setVisibility(users.isEmpty() ? View.GONE : View.VISIBLE);
         });
         mainViewModel.getUserChat().observe(this, chat -> {
-            Log.d("MainActivity::userChatObserver", "Got chat with id = " + chat.getId());
             if (chat != null) {
+                Log.d("MainActivity::userChatObserver", "Got chat with id = " + chat.getId());
                 mainViewModel.loadChats();
+                ArrayList<User> users = new ArrayList<>();
+                users.add(lastSelectedUser);
+                users.add(authenticationRepository.getCurrentUser());
+                chat.setUsers(users);
                 Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-                intent.putExtra("chatId", chat.getId());
+                intent.putExtra("chat", gson.toJson(chat));
                 startActivity(intent);
             }
         });

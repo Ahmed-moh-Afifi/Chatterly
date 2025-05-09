@@ -59,7 +59,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void loadChats() {
-        loading.setValue(true);
+//        loading.setValue(true);
         tokenManager.getValidTokens().thenApply(tokensModel -> {
             chatsAPI.getUserChats(tokensModel.getIdFromAccessToken()).enqueue(new Callback<>() {
                 @Override
@@ -70,13 +70,13 @@ public class MainViewModel extends ViewModel {
                     } else {
                         Log.d("MainViewModel::loadChats", "Failed to load chats: Invalid response.");
                     }
-                    loading.setValue(false);
+//                    loading.setValue(false);
                 }
 
                 @Override
                 public void onFailure(Call<List<Chat>> call, Throwable t) {
                     Log.d("MainViewModel::loadChats", "Failed to load chats: " + t.getMessage());
-                    loading.setValue(false);
+//                    loading.setValue(false);
                 }
             });
             return tokensModel;

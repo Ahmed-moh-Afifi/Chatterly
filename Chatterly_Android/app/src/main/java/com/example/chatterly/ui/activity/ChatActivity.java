@@ -72,7 +72,10 @@ public class ChatActivity extends AppCompatActivity {
 
         chatViewModel.loadMessages(chat.getId());
 
-        messagingHub.setChatScreenListener(chat.getId(), () -> chatViewModel.loadMessages(chat.getId())); // Reloading all messages for now. The callback should accept the message object and update the ui accordingly.
+        messagingHub.setChatScreenListener(chat.getId(), () -> {
+            Log.d("ChatActivity", "Listener for chat " + chat.getId() + " is called");
+            chatViewModel.loadMessages(chat.getId());
+        }); // Reloading all messages for now. The callback should accept the message object and update the ui accordingly.
     }
 
     private void observeViewModel() {

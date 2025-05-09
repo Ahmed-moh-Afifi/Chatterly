@@ -16,6 +16,8 @@ import com.microsoft.signalr.HubConnectionBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -35,6 +37,7 @@ public class MessagingHub {
     private final HubConnection hubConnection;
     private Runnable mainScreenListener;
     private final Map<Integer, Runnable> chatScreenListeners = new HashMap<>();
+    private final HashSet<String> sentMessages = new HashSet<>();
     private Gson gson;
 
     @Inject
@@ -52,7 +55,11 @@ public class MessagingHub {
                 mainScreenListener.run();
             }
             if (chatScreenListeners.containsKey(message.getChatId())) {
+                Log.d("MessagingHub", "Chat listener found.");
                 Objects.requireNonNull(chatScreenListeners.get(message.getChatId())).run();
+                Log.d("MessagingHub", "Finished running chat listener.");
+            } else {
+                Log.d("MessagingHub", "Chat listener not found.");
             }
         }, Object.class);
 
@@ -89,6 +96,7 @@ public class MessagingHub {
         Log.d("MessagingHub::sendMessage", "Sending message: " + message.getBody() + " to chat with id: " + message.getChatId());
         String json = gson.toJson(message);
         Log.d("MessagingHub::sendMessage", "Sending message: " + json);
+        sentMessages.add(message.getUid());
         return hubConnection.invoke("SendToChatAsync", json);
     }
 }

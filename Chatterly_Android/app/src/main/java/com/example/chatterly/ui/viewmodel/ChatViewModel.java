@@ -1,5 +1,7 @@
 package com.example.chatterly.ui.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -43,19 +45,23 @@ public class ChatViewModel extends ViewModel {
     }
 
     public void loadMessages(int chatId) {
-        loading.setValue(true);
+        Log.d("ChatViewModel::loadMessages", "Loading messages...");
+//        loading.setValue(true);
+        Log.d("ChatViewModel::loadMessages", "Loading set to true");
         // Load messages and set the messages property...
         tokenManager.getValidTokens().thenApply(tokensModel -> {
+            Log.d("ChatViewModel::loadMessages", "Got tokens, getting messages...");
             messagesAPI.getChatMessages(tokensModel.getIdFromAccessToken(), chatId).enqueue(new Callback<>() {
                 @Override
                 public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
+                    Log.d("ChatViewModel::loadMessages", "Loaded messages");
                     messages.setValue(response.body());
-                    loading.setValue(false);
+//                    loading.setValue(false);
                 }
 
                 @Override
                 public void onFailure(Call<List<Message>> call, Throwable t) {
-                    // Report to user.
+                    Log.d("ChatViewModel::loadMessages", "Error loading messages");
                 }
             });
             return tokensModel;

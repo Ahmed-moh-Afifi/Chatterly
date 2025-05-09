@@ -103,6 +103,7 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<TokensModel> call, Throwable t) {
                         runOnUiThread(() -> {
+                            progressBar.setVisibility(View.GONE);
                             Toast.makeText(RegisterActivity.this, "Login after registration failed. Try again later.", Toast.LENGTH_SHORT).show();
                         });
                     }
@@ -112,6 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 runOnUiThread(() -> {
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(RegisterActivity.this, "Registration failed. Try again later.", Toast.LENGTH_SHORT).show();
                 });
             }
