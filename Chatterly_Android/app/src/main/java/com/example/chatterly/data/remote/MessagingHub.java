@@ -27,6 +27,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import io.reactivex.disposables.Disposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,8 +63,10 @@ public class MessagingHub {
                 Log.d("MessagingHub", "Chat listener not found.");
             }
         }, Object.class);
+    }
 
-        hubConnection.start().subscribe(() -> Log.d("SignalRHub", "Connected to SignalR Hub"),
+    public Disposable connect() {
+        return hubConnection.start().subscribe(() -> Log.d("SignalRHub", "Connected to SignalR Hub"),
                 throwable -> Log.e("SignalRHub", "Error connecting to SignalR Hub", throwable));
     }
 

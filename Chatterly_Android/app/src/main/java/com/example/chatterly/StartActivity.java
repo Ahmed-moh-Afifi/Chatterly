@@ -40,12 +40,10 @@ public class StartActivity extends AppCompatActivity {
 
         authenticationRepository.loadUser().thenApply(user -> {
             if (user == null) {
-                // Redirect to LoginActivity
                 Log.d("StartActivity", "User equals null");
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
             } else {
-                // Redirect to MainActivity
                 Log.d("StartActivity", "Subscribing to chats");
                 try {
                     List<Chat> chats = chatsAPI.getUserChats(user.getId()).execute().body();
@@ -53,9 +51,12 @@ public class StartActivity extends AppCompatActivity {
                     for (Chat chat: chats) {
                         chatIds.add(String.valueOf(chat.getId()));
                     }
+                    messagingHub.connect().wait();
                     messagingHub.subscribeToChats(chatIds).blockingAwait();
                 } catch (IOException e) {
                     // Report to user.
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
                 Log.d("StartActivity", "User does not equal null, starting MainActivity");
                 Intent intent = new Intent(this, MainActivity.class);
