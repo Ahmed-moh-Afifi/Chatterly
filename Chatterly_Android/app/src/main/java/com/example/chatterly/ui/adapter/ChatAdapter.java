@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chatterly.R;
 import com.example.chatterly.model.data.Chat;
+import com.example.chatterly.model.data.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {
 
@@ -66,7 +68,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
         public void bind(Chat chat) {
             chatName.setText(chat.getName());
-            lastMessage.setText(chat.getMessages().get(0).getBody());
+            CharSequence lastMessageInfo = new StringBuilder();
+            String authorId = chat.getMessages().get(0).getAuthorId();
+            for (User user : chat.getUsers()) {
+                if (Objects.equals(user.getId(), authorId)) {
+                    lastMessageInfo += user.getFirstName() + ": ";
+                    break;
+                }
+            }
+            lastMessageInfo += chat.getMessages().get(0).getBody();
+            lastMessage.setText(lastMessageInfo);
         }
     }
 

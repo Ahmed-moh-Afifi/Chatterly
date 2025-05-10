@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chatterly.R;
+import com.example.chatterly.StartActivity;
 import com.example.chatterly.data.local.AuthenticationAPI;
 import com.example.chatterly.data.local.TokenManager;
 import com.example.chatterly.data.repository.AuthenticationRepository;
@@ -91,7 +92,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 if (user != null) {
                                     progressBar.setVisibility(View.GONE);
                                     Toast.makeText(RegisterActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                    Intent intent = new Intent(RegisterActivity.this, StartActivity.class);
                                     startActivity(intent);
                                     finish();
                                 }

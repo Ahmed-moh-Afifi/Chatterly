@@ -33,11 +33,7 @@ public class StartActivity extends AppCompatActivity {
     @Inject
     MessagingHub messagingHub;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        Log.d("StartActivity::onCreate", "Called");
-        super.onCreate(savedInstanceState);
-
+    private void messagingHubConnect(){
         authenticationRepository.loadUser().thenApply(user -> {
             if (user == null) {
                 Log.d("StartActivity", "User equals null");
@@ -63,7 +59,13 @@ public class StartActivity extends AppCompatActivity {
 
             return user;
         });
+    }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        Log.d("StartActivity::onCreate", "Called");
+        super.onCreate(savedInstanceState);
+        messagingHubConnect();
         finish();
     }
 }

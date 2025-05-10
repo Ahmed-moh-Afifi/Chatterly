@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.chatterly.R;
+import com.example.chatterly.StartActivity;
 import com.example.chatterly.data.local.AuthenticationAPI;
 import com.example.chatterly.data.local.TokenManager;
 import com.example.chatterly.data.repository.AuthenticationRepository;
@@ -76,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("LoginActivity", "User does not equal null.");
                             progressBar.setVisibility(View.GONE);
                             Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, StartActivity.class);
                             startActivity(intent);
                             Log.d("LoginActivity", "MainActivity started.");
                             finish();

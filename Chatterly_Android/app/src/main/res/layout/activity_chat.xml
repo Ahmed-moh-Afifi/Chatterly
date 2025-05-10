@@ -43,4 +43,33 @@
             android:text="Send"
             android:layout_marginStart="8dp" />
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/chatHeaderContainer"
+        android:layout_width="match_parent"
+        android:layout_height="82dp"
+        android:paddingHorizontal="16dp"
+        android:layout_alignParentTop="true"
+        android:background="#222">
+
+        <ImageButton
+            android:id="@+id/backToMain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_left_arrow"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back to MainActivity" />
+
+        <TextView
+            android:id="@+id/chatHeaderText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:textColor="#EEE"
+            android:textSize="24sp"
+            android:textStyle="normal" />
+    </RelativeLayout>
 </RelativeLayout>
