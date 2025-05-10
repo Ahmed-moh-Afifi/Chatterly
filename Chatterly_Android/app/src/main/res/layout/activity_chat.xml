@@ -14,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/messageInputContainer"
-        android:layout_margin="16dp" />
+        android:clipToPadding="false"
+        android:padding="8dp" />
 
     <LinearLayout
         android:id="@+id/messageInputContainer"
@@ -29,6 +30,7 @@
             android:id="@+id/messageInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:maxHeight="200dp"
             android:layout_weight="1"
             android:hint="Type a message"
             android:padding="12dp"

@@ -69,6 +69,7 @@ public class ChatViewModel extends ViewModel {
     }
 
     public void sendMessage(Message message) {
+        if (message.getBody().isEmpty()) return;
         messagingHub.sendMessage(message);
     }
 }

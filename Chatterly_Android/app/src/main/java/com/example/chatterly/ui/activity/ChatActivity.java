@@ -3,6 +3,7 @@ package com.example.chatterly.ui.activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -76,10 +77,22 @@ public class ChatActivity extends AppCompatActivity {
             Log.d("ChatActivity", "Listener for chat " + chat.getId() + " is called");
             chatViewModel.loadMessages(chat.getId());
         }); // Reloading all messages for now. The callback should accept the message object and update the ui accordingly.
+
+        recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (messageAdapter.getItemCount() > 0)
+                    recyclerView.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+            }
+        });
     }
 
     private void observeViewModel() {
         chatViewModel.getMessages().observe(this, this::updateMessages);
+        chatViewModel.getMessages().observe(this, messages -> {
+            messageAdapter.setMessages(messages);
+            recyclerView.smoothScrollToPosition(messages.size() - 1);
+        });
         chatViewModel.getLoading().observe(this, loading -> {
             if (loading) {
                 progressBar.setVisibility(View.VISIBLE);
@@ -94,8 +107,9 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void onSendButtonClicked() {
-        Log.d("ChatActivity::onSendButtonClicked", "Sending message: " + messageEditText.getText().toString());
-        Message message = new Message(-1, messageEditText.getText().toString(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new Date(), authenticationRepository.getCurrentUser().getId(), 0, 0, chat.getId());
+        Log.d("ChatActivity::onSendButtonClicked", "Sending message: " + messageEditText.getText().toString().trim());
+        Message message = new Message(-1, messageEditText.getText().toString().trim(), new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(), new Date(), authenticationRepository.getCurrentUser().getId(), 0, 0, chat.getId());
         chatViewModel.sendMessage(message);
+        messageEditText.setText("");
     }
 }

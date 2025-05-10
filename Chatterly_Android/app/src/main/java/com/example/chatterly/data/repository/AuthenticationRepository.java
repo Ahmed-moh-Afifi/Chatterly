@@ -42,4 +42,9 @@ public class AuthenticationRepository {
     public User getCurrentUser() {
         return currentUser;
     }
+
+    public void removeCurrentUserToken(){
+        Log.d("AuthenticationRepository::removeCurrentUserToken", "Removing current user token (aka logout)");
+        tokenManager.deleteTokens();
+    }
 }

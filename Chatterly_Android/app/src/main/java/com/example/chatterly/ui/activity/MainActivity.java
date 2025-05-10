@@ -9,8 +9,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -49,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private MainViewModel mainViewModel;
     private ChatAdapter chatAdapter;
-
     private EditText searchBar;
+    private ImageButton logoutButton;
     private ListView searchResults;
     private ArrayAdapter<String> searchAdapter;
     private List<User> foundUsers = new ArrayList<>();
@@ -66,9 +68,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         progressBar = findViewById(R.id.progressBar);
         searchBar = findViewById(R.id.searchBar);
+        logoutButton = findViewById(R.id.logoutButton);
         searchResults = findViewById(R.id.searchResults);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        logoutButton.setOnClickListener(v -> onLogoutButtonClicked());
         chatAdapter = new ChatAdapter(chat -> {
             Intent intent = new Intent(MainActivity.this, ChatActivity.class);
             intent.putExtra("chat", gson.toJson(chat));
@@ -159,5 +163,13 @@ public class MainActivity extends AppCompatActivity {
     private void updateChats(List<Chat> chats) {
         Log.d("MainActivity::updateChats", "Chats count = " + chats.size());
         chatAdapter.setChats(chats);
+    }
+
+    private void onLogoutButtonClicked(){
+        Log.d("MainActivity::logoutClicked", "Logout button has been clicked, trying to logout");
+        authenticationRepository.removeCurrentUserToken();
+        Toast.makeText(MainActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
     }
 }
