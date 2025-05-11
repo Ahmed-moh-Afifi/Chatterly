@@ -10,12 +10,14 @@ import com.example.chatterly.data.remote.ChatsAPI;
 import com.example.chatterly.data.remote.MessagingHub;
 import com.example.chatterly.data.repository.AuthenticationRepository;
 import com.example.chatterly.model.data.Chat;
+import com.example.chatterly.model.data.User;
 import com.example.chatterly.ui.activity.LoginActivity;
 import com.example.chatterly.ui.activity.MainActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import javax.inject.Inject;
 
@@ -33,8 +35,8 @@ public class StartActivity extends AppCompatActivity {
     @Inject
     MessagingHub messagingHub;
 
-    private void messagingHubConnect(){
-        authenticationRepository.loadUser().thenApply(user -> {
+    private CompletableFuture<User> messagingHubConnect(){
+        return authenticationRepository.loadUser().thenApply(user -> {
             if (user == null) {
                 Log.d("StartActivity", "User equals null");
                 Intent intent = new Intent(this, LoginActivity.class);
@@ -65,7 +67,9 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("StartActivity::onCreate", "Called");
         super.onCreate(savedInstanceState);
-        messagingHubConnect();
-        finish();
+        messagingHubConnect().thenApply(user -> {
+            finish();
+            return user;
+        });
     }
 }
