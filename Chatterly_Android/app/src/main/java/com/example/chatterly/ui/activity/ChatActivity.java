@@ -133,7 +133,6 @@ public class ChatActivity extends AppCompatActivity {
 
     private void onBackButtonClicked() {
         Log.d("ChatActivity::onBackButtonClicked", "Going back to MainActivity");
-        Intent intent = new Intent(ChatActivity.this, MainActivity.class);
-        startActivity(intent);
+        finish();
     }
 }

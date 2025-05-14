@@ -41,6 +41,7 @@ public class StartActivity extends AppCompatActivity {
                 Log.d("StartActivity", "User equals null");
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
+                finish();
             } else {
                 Log.d("StartActivity", "Subscribing to chats");
                 try {
@@ -57,6 +58,10 @@ public class StartActivity extends AppCompatActivity {
                 Log.d("StartActivity", "User does not equal null, starting MainActivity");
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
+                if (!isTaskRoot()) {
+                    finishAffinity();
+                    System.exit(0);
+                }
             }
 
             return user;

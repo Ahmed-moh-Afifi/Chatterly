@@ -171,5 +171,6 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(MainActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
+        finish();
     }
 }

@@ -57,6 +57,7 @@ public class RegisterActivity extends AppCompatActivity {
         findViewById(R.id.loginTextView).setOnClickListener(v -> {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(intent);
+            finish();
         });
     }
 
