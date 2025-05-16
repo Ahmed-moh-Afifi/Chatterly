@@ -6,6 +6,7 @@ import com.example.chatterly.data.local.AuthenticationAPI;
 import com.example.chatterly.data.local.TokenManager;
 import com.example.chatterly.model.authentication.LoginModel;
 import com.example.chatterly.model.authentication.TokensModel;
+import com.example.chatterly.model.data.Chat;
 import com.example.chatterly.model.data.Message;
 import com.example.chatterly.model.data.User;
 import com.example.chatterly.utils.Config;
@@ -63,6 +64,19 @@ public class MessagingHub {
                 Log.d("MessagingHub", "Chat listener not found.");
             }
         }, Object.class);
+
+        hubConnection.on("ChatCreated", (object) -> {
+            Log.d("MessagingHub", "Received ChatCreated.");
+            String jsonString = gson.toJson(object);
+            Chat chat = gson.fromJson(jsonString, Chat.class);
+            ArrayList<String> chatIds = new ArrayList<String>();
+            chatIds.add(String.valueOf(chat.getId()));
+            subscribeToChats(chatIds);
+        }, Object.class);
+
+//        hubConnection.on("ChatCreated", () -> {
+//            Log.d("MessagingHub", "Received ChatCreated.");
+//        });
     }
 
     public Completable connect() {
