@@ -29,6 +29,7 @@ public class TokenManager {
     private final String baseUrl = Config.api + "Auth/";
 
     OkHttpClient httpClient;
+    Gson gson;
 
     private TokensModel tokensModel;
     private CompletableFuture<TokensModel> refreshTokensFuture;
@@ -36,9 +37,10 @@ public class TokenManager {
     private final Context context;
 
     @Inject
-    public TokenManager(@ApplicationContext Context context, OkHttpClient httpClient) {
+    public TokenManager(@ApplicationContext Context context, OkHttpClient httpClient, Gson gson) {
         this.context = context;
         this.httpClient = httpClient;
+        this.gson = gson;
     }
 
     public TokensModel readSavedTokens() {
@@ -50,16 +52,12 @@ public class TokenManager {
             String jsonString = securePrefs.getString("tokens-model", null);
             tokensModel = null;
             if (jsonString != null) {
-                Gson gson = new Gson();
                 tokensModel = gson.fromJson(jsonString, TokensModel.class);
             }
             return tokensModel;
-        } catch (GeneralSecurityException e) {
-            // throw appropriate exception.
-        } catch (IOException e) {
-            // throw appropriate exception.
+        } catch (Exception e) {
+            return null;
         }
-        return null;
     }
 
     public void saveTokens(TokensModel tokensModel) {
@@ -69,14 +67,11 @@ public class TokenManager {
             SharedPreferences securePrefs = EncryptedSharedPreferences.create(context, "secure_prefs", masterKey, EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
 
-            Gson gson = new Gson();
             String jsonString = gson.toJson(tokensModel);
             securePrefs.edit().putString("tokens-model", jsonString).apply();
             this.tokensModel = tokensModel;
-        } catch (GeneralSecurityException e) {
-            // throw appropriate exception.
-        } catch (IOException e) {
-            // throw appropriate exception.
+        } catch (Exception e) {
+            Log.d("TokenManager", "Failed to save tokens.");
         }
     }
 
@@ -88,16 +83,13 @@ public class TokenManager {
                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
             securePrefs.edit().remove("tokens-model").apply();
             tokensModel = null;
-        } catch (GeneralSecurityException e) {
-            // throw appropriate exception.
-        } catch (IOException e) {
-            // throw appropriate exception.
+        } catch (Exception e) {
+            Log.d("TokenManager", "Failed to delete tokens.");
         }
     }
 
     private CompletableFuture<TokensModel> internalRefreshTokens() {
         Log.d("TokenManager", "Requesting new tokens...");
-        Gson gson = new Gson();
         RequestBody body = RequestBody.create(gson.toJson(tokensModel), MediaType.get("application/json"));
         return CompletableFuture.supplyAsync(() -> {
             Request request = new Request.Builder().url(baseUrl + "Refresh").post(body).build();
@@ -108,7 +100,7 @@ public class TokenManager {
                     }
                 }
             } catch (IOException e) {
-
+                Log.d("TokenManager", "Failed get new tokens from server.");
             }
             return null;
         }).thenApply((tokensModel) -> {
@@ -129,7 +121,6 @@ public class TokenManager {
         Log.d("TokenManager", "Refreshing tokens...");
         if (refreshTokensFuture == null || refreshTokensFuture.isDone()) {
             refreshTokensFuture = internalRefreshTokens();
-
         }
         return refreshTokensFuture;
     }

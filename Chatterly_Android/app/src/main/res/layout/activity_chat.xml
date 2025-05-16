@@ -15,7 +15,10 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/messageInputContainer"
         android:clipToPadding="false"
-        android:padding="8dp" />
+        android:paddingTop="82dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"/>
 
     <LinearLayout
         android:id="@+id/messageInputContainer"

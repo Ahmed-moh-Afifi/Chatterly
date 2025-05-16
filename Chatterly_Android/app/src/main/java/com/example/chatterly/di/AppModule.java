@@ -32,8 +32,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AppModule {
     @Provides
     @Singleton
-    public static TokenManager provideTokenManager(@ApplicationContext Context context, OkHttpClient httpClient) {
-        return new TokenManager(context, httpClient);
+    public static TokenManager provideTokenManager(@ApplicationContext Context context, OkHttpClient httpClient, Gson gson) {
+        return new TokenManager(context, httpClient, gson);
     }
 
     @Provides
