@@ -3,10 +3,12 @@ using Microsoft.IdentityModel.Tokens;
 using Chatterly_Backend.Data;
 using Chatterly_Backend.Data.DTOs;
 using Chatterly_Backend.Data.Models;
+using Microsoft.AspNetCore.SignalR;
+using Chatterly_Backend.Hubs;
 
 namespace Chatterly_Backend.Repositories
 {
-    public class ChatsRepository(ApplicationDbContext dbContext, ILogger<ChatsRepository> logger) : IChatsRepository
+    public class ChatsRepository(ApplicationDbContext dbContext, IHubContext<MessagingHub> hubContext, ILogger<ChatsRepository> logger) : IChatsRepository
     {
         public async Task<Chat> CreateChatAsync(string name, IEnumerable<string> userIds)
         {
@@ -166,6 +168,9 @@ namespace Chatterly_Backend.Repositories
 
                 chat.Name = targetedGuy.UserName!;
             }
+
+            await hubContext.Clients.User(conversationInitiatorId).SendAsync("ChatCreated", chat);
+            await hubContext.Clients.User(targetedGuyId).SendAsync("ChatCreated", chat);
 
             return chat;
         }

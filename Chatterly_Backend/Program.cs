@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using NotificationService.Interfaces;
 using DotNetEnv;
 using Chatterly_Backend.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 var envPath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
 if (File.Exists(envPath))
@@ -115,6 +116,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddSingleton(notificationService);
 builder.Services.AddSingleton<INotificationService>(notificationService);
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 builder.Services.AddScoped<IChatsRepository, ChatsRepository>();
 builder.Services.AddScoped<IMessagesRepository, MessagesRepository>();
 builder.Services.AddSingleton<TokenService>();
